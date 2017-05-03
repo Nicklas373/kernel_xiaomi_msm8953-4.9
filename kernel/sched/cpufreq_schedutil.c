@@ -403,7 +403,7 @@ static void sugov_update_shared(struct update_util_data *hook, u64 time,
 			/* clear cache when it's bypassed */
 			sg_policy->cached_raw_freq = 0;
 		} else {
-			next_f = sugov_next_freq_shared(sg_cpu);
+			next_f = sugov_next_freq_shared(sg_cpu, time);
 		}
 
 		sugov_update_commit(sg_policy, time, next_f);
