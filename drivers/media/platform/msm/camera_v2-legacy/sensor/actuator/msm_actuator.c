@@ -1,3 +1,4 @@
+
 /* Copyright (c) 2011-2019, The Linux Foundation. All rights reserved.
  *
  * This program is free software; you can redistribute it and/or modify
@@ -26,9 +27,9 @@ DEFINE_MSM_MUTEX(msm_actuator_mutex);
 #define CDBG(fmt, args...) pr_debug(fmt, ##args)
 #endif
 
-#define PARK_LENS_LONG_STEP 7
-#define PARK_LENS_MID_STEP 5
-#define PARK_LENS_SMALL_STEP 3
+#define PARK_LENS_LONG_STEP 3
+#define PARK_LENS_MID_STEP 2
+#define PARK_LENS_SMALL_STEP 1
 #define MAX_QVALUE 4096
 #ifdef CONFIG_MACH_XIAOMI_MIDO
 #define PARK_LENS_QUIET_UPPER_CODE 400
@@ -877,9 +878,9 @@ static int32_t msm_actuator_park_lens(struct msm_actuator_ctrl_t *a_ctrl)
 				PARK_LENS_SMALL_STEP);
 		} else {
 			next_lens_pos = (next_lens_pos >
-				a_ctrl->park_lens.max_step) ?
+				a_ctrl->park_lens.max_step/4) ?
 				(next_lens_pos - a_ctrl->park_lens.
-				max_step) : 0;
+				max_step/4) : 0;
 		}
 #endif
 		a_ctrl->func_tbl->actuator_parse_i2c_params(a_ctrl,
