@@ -2746,15 +2746,29 @@ int gsi_poll_channel(unsigned long chan_hdl,
 		/* update rp to see of we have anything new to process */
 		rp = gsi_readl(gsi_ctx->base +
 			GSI_EE_n_EV_CH_k_CNTXT_4_OFFS(ctx->evtr->id, ee));
-		rp |= ctx->ring.rp & 0xFFFFFFFF00000000;
+		rp |= ctx->ring.rp & 0xFFFFFFFF00000000ULL;
 
 		ctx->evtr->ring.rp = rp;
-	}
-
-	if (ctx->evtr->ring.rp == ctx->evtr->ring.rp_local) {
-		spin_unlock_irqrestore(&ctx->evtr->ring.slock, flags);
-		ctx->stats.poll_empty++;
-		return GSI_STATUS_POLL_EMPTY;
+		/* read gsi event ring rp again if last read is empty */
+		if (rp == ctx->evtr->ring.rp_local) {
+			/* event ring is empty */
+			gsi_writel(1 << ctx->evtr->id, gsi_ctx->base +
+				GSI_EE_n_CNTXT_SRC_IEOB_IRQ_CLR_OFFS(ee));
+			/* do another read to close a small window */
+			__iowmb();
+			rp = gsi_readl(gsi_ctx->base +
+				GSI_EE_n_EV_CH_k_CNTXT_4_OFFS(
+				ctx->evtr->id, ee));
+			rp |= ctx->ring.rp & 0xFFFFFFFF00000000ULL;
+			ctx->evtr->ring.rp = rp;
+			if (rp == ctx->evtr->ring.rp_local) {
+				spin_unlock_irqrestore(
+					&ctx->evtr->ring.slock,
+					flags);
+				ctx->stats.poll_empty++;
+				return GSI_STATUS_POLL_EMPTY;
+			}
+		}
 	}
 
 	gsi_process_evt_re(ctx->evtr, notify, false);
