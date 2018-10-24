@@ -336,11 +336,7 @@ module_param_named(
 	battery_type, fg_batt_type, charp, 00600
 );
 
-#if (defined CONFIG_MACH_XIAOMI_MIDO)
-static int fg_sram_update_period_ms = 3000;
-#else
 static int fg_sram_update_period_ms = 30000;
-#endif
 module_param_named(
 	sram_update_period_ms, fg_sram_update_period_ms, int, 00600
 );
