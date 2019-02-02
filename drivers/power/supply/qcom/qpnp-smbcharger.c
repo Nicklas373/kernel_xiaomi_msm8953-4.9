@@ -1043,7 +1043,7 @@ static int get_property_from_fg(struct smbchg_chip *chip,
 	return rc;
 }
 
-#define DEFAULT_BATT_CAPACITY	50
+#define DEFAULT_BATT_CAPACITY	0
 static int get_prop_batt_capacity(struct smbchg_chip *chip)
 {
 	int capacity, rc;
@@ -1059,7 +1059,7 @@ static int get_prop_batt_capacity(struct smbchg_chip *chip)
 	return capacity;
 }
 
-#define DEFAULT_BATT_TEMP		200
+#define DEFAULT_BATT_TEMP		0
 static int get_prop_batt_temp(struct smbchg_chip *chip)
 {
 	int temp, rc;
