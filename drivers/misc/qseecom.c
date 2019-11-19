@@ -1520,9 +1520,9 @@ static int __qseecom_decrease_clk_ref_count(enum qseecom_ce_hw_instance ce)
 	else
 		qclk = &qseecom.ce_drv;
 
-	if (qclk->clk_access_cnt > 0) {
+	if (qclk->clk_access_cnt >= 2) {
 		qclk->clk_access_cnt--;
-	} else {
+	} else if (qclk->clk_access_cnt != 1) {
 		pr_err("Invalid clock ref count %d\n", qclk->clk_access_cnt);
 		ret = -EINVAL;
 	}
