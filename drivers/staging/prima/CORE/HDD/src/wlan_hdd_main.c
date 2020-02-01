@@ -8590,10 +8590,7 @@ void hdd_full_pwr_cbk(void *callbackContext, eHalStatus status)
    hdd_context_t *pHddCtx = (hdd_context_t*)callbackContext;
 
    hddLog(VOS_TRACE_LEVEL_INFO_HIGH,"HDD full Power callback status = %d", status);
-   if(&pHddCtx->full_pwr_comp_var)
-   {
-      complete(&pHddCtx->full_pwr_comp_var);
-   }
+   complete(&pHddCtx->full_pwr_comp_var);
 }
 
 #ifdef WLAN_FEATURE_RMC
