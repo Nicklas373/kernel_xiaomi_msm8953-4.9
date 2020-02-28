@@ -367,26 +367,25 @@ static void vmpressure_global(gfp_t gfp, unsigned long scanned,
 	if (!(gfp & (__GFP_HIGHMEM | __GFP_MOVABLE | __GFP_IO | __GFP_FS)))
 		return;
 
-	if (!scanned)
-		return;
+	if (scanned) {
+		spin_lock(&vmpr->sr_lock);
+		if (!vmpr->scanned)
+			calculate_vmpressure_win();
 
-	spin_lock(&vmpr->sr_lock);
-	if (!vmpr->scanned)
-		calculate_vmpressure_win();
+		vmpr->scanned += scanned;
+		vmpr->reclaimed += reclaimed;
 
-	vmpr->scanned += scanned;
-	vmpr->reclaimed += reclaimed;
+		if (!current_is_kswapd())
+			vmpr->stall += scanned;
 
-	if (!current_is_kswapd())
-		vmpr->stall += scanned;
+		stall = vmpr->stall;
+		scanned = vmpr->scanned;
+		reclaimed = vmpr->reclaimed;
+		spin_unlock(&vmpr->sr_lock);
 
-	stall = vmpr->stall;
-	scanned = vmpr->scanned;
-	reclaimed = vmpr->reclaimed;
-	spin_unlock(&vmpr->sr_lock);
-
-	if (scanned < vmpressure_win)
-		return;
+		if (scanned < vmpressure_win)
+			return;
+	}
 
 	spin_lock(&vmpr->sr_lock);
 	vmpr->scanned = 0;
@@ -394,8 +393,12 @@ static void vmpressure_global(gfp_t gfp, unsigned long scanned,
 	vmpr->stall = 0;
 	spin_unlock(&vmpr->sr_lock);
 
-	pressure = vmpressure_calc_pressure(scanned, reclaimed);
-	pressure = vmpressure_account_stall(pressure, stall, scanned);
+	if (scanned) {
+		pressure = vmpressure_calc_pressure(scanned, reclaimed);
+		pressure = vmpressure_account_stall(pressure, stall, scanned);
+	} else {
+		pressure = 100;
+	}
 	vmpressure_notify(pressure);
 }
 
