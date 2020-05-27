@@ -30,6 +30,14 @@
 	/delete-property/ qcom,msm-vdd-wsa-switch-current;
 };
 
+&msm_digital_codec {
+	status = "okay";
+};
+
+&pmic_analog_codec {
+	status = "okay";
+};
+
 &wsa881x_i2c_f {
         status = "disabled";
 };
