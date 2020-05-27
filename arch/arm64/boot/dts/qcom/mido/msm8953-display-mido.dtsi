@@ -91,7 +91,6 @@
 	/delete-node/ qcom,mdss_dsi_boent51021_1200p_video;
 	/delete-node/ qcom,mdss_dsi_hx8394d_kingdisplay_vid;
 	/delete-node/ qcom,mdss_dsi_inxnt51021_1200p_video;
->>>>>>> 8c74a81b0a222... ARM64/dts: mido: Cleanup overlayed dtsi
 };
 
 &mdss_dsi0 {
