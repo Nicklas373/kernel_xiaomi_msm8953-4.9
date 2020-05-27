@@ -589,13 +589,13 @@ exit:
 
 static int fpc1020_remove(struct platform_device *pdev)
 {
+	struct  fpc1020_data *fpc1020 = dev_get_drvdata(&pdev->dev);
+
 #ifdef CONFIG_MACH_XIAOMI_MIDO
 	if(!IS_ERR(soc_symlink)) {
 		kernfs_remove_by_name(soc_symlink->parent, soc_symlink->name);
 	}
 #endif
-
-	struct  fpc1020_data *fpc1020 = dev_get_drvdata(&pdev->dev);
 
 	sysfs_remove_group(&pdev->dev.kobj, &attribute_group);
 	mutex_destroy(&fpc1020->lock);
