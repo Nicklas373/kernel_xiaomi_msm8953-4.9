@@ -129,7 +129,7 @@
 			qcom,iterm-ma = <200>;
 			qcom,float-voltage-mv = <4400>;
 			qcom,resume-delta-mv = <50>;
-			qcom,thermal-mitigation = <1500 1200 900 600 300 0>;
+			qcom,thermal-mitigation = <1800 1500 1200 900 600 300 0>;
 			qcom,charge-unknown-battery;
 			qcom,fastchg-current-comp = <1200>;
 			qcom,float-voltage-comp = <15>;
