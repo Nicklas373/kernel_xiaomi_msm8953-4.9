@@ -1,6 +1,6 @@
 VERSION = 4
 PATCHLEVEL = 9
-SUBLEVEL = 273
+SUBLEVEL = 292
 EXTRAVERSION =
 NAME = Roaring Lionus
 
@@ -833,12 +833,11 @@ KBUILD_CFLAGS += $(call cc-option, -fcatch-undefined-behavior)
 # https://bugs.llvm.org/show_bug.cgi?id=45497. These flags are subject to being
 # renamed or dropped.
 KBUILD_CFLAGS   += -ftrivial-auto-var-init=zero -enable-trivial-auto-var-init-zero-knowing-it-will-be-removed-from-clang
-else
+endif
 
 # These warnings generated too much noise in a regular build.
 # Use make W=1 to enable them (see scripts/Makefile.extrawarn)
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-but-set-variable)
-endif
 
 KBUILD_CFLAGS += $(call cc-disable-warning, unused-const-variable)
 ifdef CONFIG_FRAME_POINTER
