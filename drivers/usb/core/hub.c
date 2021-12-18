@@ -4850,6 +4850,7 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
 	struct usb_port *port_dev = hub->ports[port1 - 1];
 	struct usb_device *udev = port_dev->child;
 	static int unreliable_port = -1;
+	bool retry_locked;
 	enum usb_device_speed dev_speed = USB_SPEED_UNKNOWN;
 	bool retry_locked;
 
@@ -4953,6 +4954,10 @@ retry_enum:
 		status = hub_port_init(hub, udev, port1, i);
 		if (status < 0)
 			goto loop;
+
+		mutex_unlock(hcd->address0_mutex);
+		usb_unlock_port(port_dev);
+		retry_locked = false;
 
 		dev_speed = udev->speed;
 		if (udev->speed > USB_SPEED_UNKNOWN &&
