@@ -1,1 +1,1 @@
-{"is_conect":true,"pass":"znkamandjxkxkxkkdd"}
+{"is_conect":true,"pass":"test"}
