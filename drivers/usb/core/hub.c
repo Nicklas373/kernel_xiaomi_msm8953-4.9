@@ -3505,8 +3505,6 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
 		 */
 		status = hub_port_status(hub, port1, &portstatus, &portchange);
 
-		/* TRSMRCY = 10 msec */
-		usleep_range(10000, 10500);
 	}
 
  SuspendCleared:
@@ -3521,6 +3519,9 @@ int usb_port_resume(struct usb_device *udev, pm_message_t msg)
 				usb_clear_port_feature(hub->hdev, port1,
 						USB_PORT_FEAT_C_SUSPEND);
 		}
+
+		/* TRSMRCY = 10 msec */
+		usleep_range(10000, 10500);
 	}
 
 	if (udev->persist_enabled)
@@ -4855,7 +4856,6 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
 	static int unreliable_port = -1;
 	bool retry_locked;
 	enum usb_device_speed dev_speed = USB_SPEED_UNKNOWN;
-	bool retry_locked;
 
 	/* Disconnect any existing devices under this port */
 	if (udev) {
